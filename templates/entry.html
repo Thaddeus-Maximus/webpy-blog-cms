@@ -1,0 +1,44 @@
+$def with(title, post_id, date, tags, full_text, comments)
+
+<div class="post">
+<span id="title"><a href=""><h3>$title</h3></a></span>
+<div class="details">Posted on ${date.strftime("%Y-%m-%d")} at ${date.strftime("%H:%M")}</div>
+<br/>
+$:full_text
+<br/><br/><div class="details">Tagged:
+$for tag in tags:
+  <a href="/blog/tagged/$tag">${tag+('' if loop.last else ',')}</a>
+</div>
+</div>
+<div class="content">
+  $if len(comments)==1:
+    1 comment
+  $elif len(comments)>1:
+    $len(comments) comments
+  $else:
+    No comments yet... Be the first!
+</div>
+$for comment in comments:
+  <div class="content">
+    $if comment['make_email_public']:
+      <a href="mailto:$comment['email']">$comment['name']</a>,
+    $else:
+      $comment['name'],
+    on $comment['date'].strftime("%Y-%m-%d at %Y:%M") said:
+    <br/>
+    $if comment['contents']:
+      $:{markdown.markdown(comment['contents'])}
+  </div>
+
+<div class="content">
+  <h2>Add your own comment:</h2>
+  <br/>
+  <form action="/blog/comment" method="POST">
+    Name: <input type="text" name="name">
+    <br/>Email: <input type="text" name="email"> Make public? <input type="checkbox" name="make_email_public" checked>
+    <br/>Comment:
+    <br/><textarea name="contents"></textarea>
+    <br/><input type="hidden" value="$post_id" name="post_id">
+    <br/><input type="submit" value="Submit" action="/blog/comment" method="POST">
+  </form>
+</div>

@@ -1,0 +1,38 @@
+$def with(posts, page_no, tagged, start_date)
+
+$if start_date:
+  <div class="content">
+    Posts ${'tagged "'+tagged+'"' if tagged else ''} starting from $start_date.strftime("%B %Y")
+  </div>
+$elif tagged:
+  <div class="content">
+    Posts tagged "$tagged"
+  </div>
+
+$if len(posts):
+  $for post in posts:
+    <div class="post">
+      <span id="title"><a href="/blog/entry/$post['id']"><h3>$post['title']</h3></a></span>
+      <div class="details">Posted on ${post['date'].strftime("%Y-%m-%d")} at ${post['date'].strftime("%H:%M")}</div>
+      <br/>
+      $:{markdown.markdown(post['start_content']) if post['format']=='markdown' else post['start_content']}
+      $if post['end_content']:
+        <a href="/blog/entry/$post['id']"><h1>Read More...</h1></a>
+      <br/><br/><div class="details">Tagged:
+      $for tag in post['tags'].split(','):
+        $if tag:
+          <a href="/blog/?tagged=$urllib.quote(tag,'')">${tag+('' if loop.last else ',')}</a>
+      </div>
+    </div>
+$else:
+  <div class="content">
+    <h2>Sorry, no posts!</h2>
+  </div>
+
+
+<div class="content">
+  $if page_no>1:
+    <a style="float:left;" href="/blog/?page=${page_no-1}&start_date=$urllib.quote(start_date.strftime("%Y-%m-%d") if start_date else '','')&tagged=$urllib.quote(tagged,'')"><h1>${'Older' if start_date else 'Newer'}</h1></a>
+  &nbsp;
+  <a style="float:right;" href="/blog/?page=${page_no+1}&start_date=$urllib.quote(start_date.strftime("%Y-%m-%d") if start_date else '','')&tagged=$urllib.quote(tagged,'')"><h1>${'Newer' if start_date else 'Older'}</h1></a>
+</div>

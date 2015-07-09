@@ -1,0 +1,195 @@
+$def with (content)
+<title>Thad's Mainframe</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css'>
+<style>
+/*colors = ["#F8F8F2",    "#75715E",    "#AE81FF",    "#6678EF",
+    "#66d9ef",    "#26F97E",    "#a6e22e",    "#FFE792",
+    "#F9D226",    "#FD971F",    "#f92670",    "#F93F26", "#9D550F"];*/
+  body {
+    background: url(/blog/static/background.png) no-repeat top left #161512;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  *{
+    color: #F8F8F2;
+    font-family: "Open Sans", "Droid Sans", sans-serif;
+    margin: 0px;
+    padding: 0px;
+    font-size: 10pt;
+  }
+  h1, h2, h3, h4, em{
+    font-family: "Merriweather Sans", "Open Sans", "Droid Sans", sans-serif;
+  }
+  h1{
+    font-size: 12pt;
+  }
+  h2{
+    font-size: 16pt;
+  }
+  h3{
+    font-size: 24pt;
+  }
+  h4{
+    font-size: 28pt;
+  }
+  em{
+    font-size: 10pt;
+  }
+  /*h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link {
+    text-decoration: none;
+  }
+  h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover {
+    text-decoration: underline;
+  }*/
+
+
+  #header {
+    border-bottom: none;
+    background: rgba(0,0,0,0.0);
+    float: top;
+    display: block;
+    width: 100%;
+    height: 50px;
+    margin: 4px;
+    padding: 2px;
+  }
+  #sidebar {
+    border-right: none;
+    background: rgba(0,0,0,0.65);
+    display: block;
+    width: 200px;
+
+    float: left;
+
+    height: 100%;
+    margin: 4px;
+    padding: 6px;
+  }
+  #sidebar li, #sidebar li a, #sidebar li a:visited, #sidebar li a:link {
+    color: #75715E;
+  }
+  #sidebar li:hover, #sidebar li a:hover {
+    color: #F8F8F2;
+  }
+  #content {
+    border: none;
+    background: transparent;
+    display: block;
+    width: calc(100% - 226px);;
+    /*vertical-align: top;*/
+    float: left;
+
+    height: 100%;
+  }
+  #content .details{
+    font-family: "Merriweather Sans", "Open Sans", "Droid Sans", sans-serif;
+    font-size: 9pt;
+    color: #75715E;
+  }
+  #content .details:hover{
+    color: #F8F8F2;
+  }
+  #content .details a:link, #content .details a:visited{
+    text-decoration: none;
+    color: #75715E;
+  }
+  #content .details a:hover{
+    color: #F8F8F2;
+    text-decoration: underline;
+  }
+  .darkened-background{
+    background: rgba(0,0,0,0.65);
+  }
+  .post, .content {
+    background: rgba(0,0,0,0.65);
+    padding: 6px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  ul{
+    list-style-type: circle; 
+    list-style-position: inside;
+  }
+  a:link, a:visited {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .content a:link, .content a, #content a, .content a:visited{
+    color: #66d9ef;
+    text-decoration: underline;
+  }
+  #content #title a:link, #content #title a, #content #title a:visited{
+    color: #F8F8F2;
+    text-decoration: none;
+  }
+  #content #title a:hover{
+    text-decoration: underline;
+  }
+  img {
+    width: 400px;
+    margin: 8px;
+  }
+  p {
+    margin-top: 4px;
+    padding-top: 4px;
+  }
+  pre code {
+    font-family: Consolas, Ubuntu Mono, monospace;
+    background-color: rgba(0,0,0,0.9);
+    padding: 4px;
+    margin: 6px;
+    display: block;
+    color: #FFE792;
+  }
+
+  input[type="text"], textarea {
+    background-color: transparent;
+    border: 1px solid rgba(117,113,94,0.5);
+    color: #FFE792;
+    padding: 4px;
+    margin: 4px;
+  }
+  textarea{
+    width: 100%;
+    height: 200px;
+  }
+  input[type="submit"] {
+    background-color: transparent;
+    border: none;
+    color: #a6e22e;
+  }
+</style>
+
+<body>
+  <div id="header">
+    <a href="/blog/"><h4>Thad's Mainframe</h4></a>
+    
+  </div>
+  $if not context.mobile:
+    <div id="sidebar">
+      <h1>Posts by date</h1>
+      <ul>
+      $for date in context.daterange:
+        <li><a href="/blog/?start_date=$urllib.quote(date.strftime('%Y-%m-01'),'')">$date.strftime('%B %Y')</a></li>
+      </ul>
+      <br/>      
+      <h1>Posts by tag</h1>
+      <ul>
+      $for tag in context.tags:
+        <li><a href="/blog/?tagged=$urllib.quote(tag,'')">$tag</a></li>
+      </ul>
+      <br/>
+      <a href="/blog/contact"><h1>Contact</h1></a>
+      <br/>
+      <a href="/blog/about"><h1>About</h1></a>
+    </div>
+  <div id="content">
+    $:content
+  </div>
+</body>
